@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Datepicker - Default functionality</title>
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <!--Here-->
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.11.2.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+  
+	  
+  <script>
+  $( function() {
+    $("#datepicker").datepicker({ minDate: 0 });
+	$( "#datepicker" ).datepicker();
+	
+  } );
+    </script>
+	
+ <script type="text/javascript">
+     window.onload = function() {
+	getTable();
+  	document.getElementById('sectionhide').style.display = 'none';
+	document.getElementById('sectionhide2').style.display = 'none';
+		
+	};
+	function getTable() {
+		var myReq = new XMLHttpRequest();
+	
+		var searchParm = document.getElementById('searchParm').value;
+		myReq.open('GET', 'http://localhost/demo/cgi-bin/search.pl?search=' + searchParm);
+		myReq.onload = function(){
+			var myData = JSON.parse(myReq.responseText);
+			console.log(myData);
+			renderHTML(myData);
+		}
+	myReq.send();
+	}
+	
+	function renderHTML(data){
+		var displayTable = document.getElementById("tabledata")
+		$('#tabledata div').empty();
+		var htmlString = "";
+		for (var i = 0; i < data.length; i++) {
+			htmlString += "<div>" + data[i].date + "&nbsp;&nbsp;"  + data[i].time + "&nbsp;&nbsp;" + data[i].description + "</div>";
+		}
+		htmlString += "";
+		displayTable.insertAdjacentHTML('beforeend', htmlString);
+	}
+	function showNew(){
+		document.getElementById('HideNew').style.display = 'block';
+		document.getElementById('sectionhide').style.display = 'none';
+		document.getElementById('sectionhide2').style.display = 'none';
+	}
+	function display(id) {
+	
+	var div = document.getElementById(id);
+	
+	if(div.style.display == 'none'){
+	  div.style.display = 'block';
+	  document.getElementById('sectionhide2').style.display = 'block';
+	  doHideNew();
+
+		}else{
+	  	div.style.display = 'none';
+		
+         	}
+	 }
+	function doHideNew(){
+	  document.getElementById('HideNew').style.display = 'none';
+	 }   
+	 function cancelButton(){
+	 
+	 }
+	function validateForm() {
+	var time = document.getElementById('SelectTime').value;
+	var date = document.getElementById('datepicker').value;
+	var DESC = document.getElementById('DESC').value;
+	
+    if (date == "") {
+		alert("Date must be filled out");
+		document.getElementById('sectionhide').style.display = 'block';
+		document.getElementById('sectionhide2').style.display = 'block';
+		
+        return false;
+    }
+	
+	if (time == "") {
+		alert("Time must be filled out");
+		document.getElementById('sectionhide').style.display = 'block';
+		document.getElementById('sectionhide2').style.display = 'block';
+		
+        return false;
+    }
+		if (DESC == "") {
+		alert("Description must be filled out");
+		document.getElementById('sectionhide').style.display = 'block';
+		document.getElementById('sectionhide2').style.display = 'block';
+		
+        return false;
+    }
+	
+}
+	 
+ </script>
+    </head>
+
+	
+    <body>
+        <div id="HideNew"><button onclick="display('sectionhide');">New</button></div>
+		<div id="sectionhide">
+		<form name=form1"  action="cgi-bin/process_application.pl" onsubmit="return validateForm()" method="post">
+		<input type="hidden" name="process" value="process">
+		<button onclick="" >ADD</button>
+		<table>
+		<tr>
+		<td>DATE:</td>
+		<td><input type="text" name="DATE" id="datepicker"> </td>
+		</tr>
+		<tr>
+		<td>Time</td>
+		<td>
+		<select id="SelectTime" name="SelectTime" size="1">
+			<option value="" >select time</option>
+			<option value="8:00">8:00</option>
+			<option value="9:00">9:00</option>
+			<option value="10:00">10:00</option>
+			<option value="11:00">11:00</option>
+			<option value="12:00">12:00</option>
+			<option value="1:00">1:00</option>
+			<option value="2:00">2:00</option>
+			<option value="3:00">3:00</option>
+			<option value="4:00">4:00</option>
+			<option value="5:00">5:00</option>
+		</select>
+		</td>
+		</tr>
+		<tr>
+		<td>DESC:</td>
+		<td><input type="text" name="DESC" id="DESC"></td>
+		</tr>
+		<tr>
+		<tr>
+		</table>
+	</div>
+	</form>
+	<div id="sectionhide2">
+	<button onclick="showNew();" id="cancel" >CANCEL</button>
+	</div>	
+	<div id="search">
+	<button onclick="getTable()" id="cancel" >Search Description</button> <input type="text" name="search" id="searchParm">
+	</div>	
+	<div id=tabledata> <div>
+	
+	<!--<script src="js/tabledata2.js"></script>-->
+    </body>
+</html>
